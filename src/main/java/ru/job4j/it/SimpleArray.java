@@ -17,8 +17,8 @@ public class SimpleArray<T> implements Iterable<T> {
           return position < size;
        }
 
-    @Override
-    public T next() {
+       @Override
+       public T next() {
        if (!hasNext()) {
        throw new NoSuchElementException();
        }
@@ -30,9 +30,9 @@ public class SimpleArray<T> implements Iterable<T> {
 
     private int size;
 
-    public SimpleArray(int aMaxSize) {
+    public SimpleArray(int maxSize) {
        size = 0;
-       elements = new Object[aMaxSize];
+       elements = new Object[maxSize];
     }
 
     public void add(T model) {
