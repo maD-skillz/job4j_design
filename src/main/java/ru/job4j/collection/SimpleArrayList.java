@@ -24,7 +24,6 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public void add(T value) {
-        expectedModCount = modCount;
         if (size() == container.length) {
             container = Arrays.copyOf(container, container.length * 2);
         }
@@ -34,29 +33,28 @@ public class SimpleArrayList<T> implements List<T> {
 
         @Override
     public T set(int index, T newValue) {
-        expectedModCount = modCount;
         Objects.checkIndex(index, size);
+        T oldValue = container[index];
         container[index] = newValue;
         modCount++;
-        return container[index];
+        return oldValue;
     }
 
     @Override
     public T remove(int index) {
-        expectedModCount = modCount;
         Objects.checkIndex(index, size);
-        if (size - index > 1) {
-            System.arraycopy(
+        T oldValue = container[index];
+        System.arraycopy(
                     container,
                     index + 1,
                     container,
                     index,
-                    size - index - 1
+                    container.length - index - 1
             );
-        }
-        container[size--] = null;
+        container[container.length - 1] = null;
+        size--;
         modCount++;
-        return container[index];
+        return oldValue;
     }
 
     @Override
@@ -72,21 +70,29 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
+        expectedModCount = modCount;
+        if (expectedModCount != modCount) {
+            throw new ConcurrentModificationException();
+        }
         return new Iterator<>() {
 
             @Override
             public boolean hasNext() {
+                expectedModCount = modCount;
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return position < size;
             }
 
             @Override
             public T next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
+                expectedModCount = modCount;
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
+                }
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
 
                 return container[position++];
