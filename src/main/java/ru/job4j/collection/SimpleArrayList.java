@@ -12,71 +12,66 @@ public class SimpleArrayList<T> implements List<T> {
 
     private int modCount;
 
-    private int expectedModCount;
-
     private int position;
 
+    private int expectedModCount;
+
     public SimpleArrayList(int capacity) {
+        position = 0;
+        size = 0;
         this.container = (T[]) new Object[capacity];
     }
 
     @Override
     public void add(T value) {
-        if (size == container.length) {
-            throw new IllegalStateException();
-        }
-        if (size() == container.length - 1) {
+        expectedModCount = modCount;
+        if (size() == container.length) {
             container = Arrays.copyOf(container, container.length * 2);
         }
-            container[position++] = value;
-        expectedModCount = modCount;
+            container[size++] = value;
         modCount++;
-
-        }
+    }
 
         @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, container.length);
-        container[index] = newValue;
         expectedModCount = modCount;
+        Objects.checkIndex(index, size);
+        container[index] = newValue;
         modCount++;
-        return newValue;
+        return container[index];
     }
 
     @Override
     public T remove(int index) {
-        size = modCount;
-        Objects.checkIndex(index, container.length);
-        if (size - index >= 1) {
+        expectedModCount = modCount;
+        Objects.checkIndex(index, size);
+        if (size - index > 1) {
             System.arraycopy(
                     container,
                     index + 1,
                     container,
                     index,
-                    size - 1
+                    size - index - 1
             );
         }
-        expectedModCount = modCount;
+        container[size--] = null;
         modCount++;
-        return container[size];
+        return container[index];
     }
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(index, size);
         return container[index];
     }
 
     @Override
     public int size() {
-        return modCount;
+        return size;
     }
 
     @Override
     public Iterator<T> iterator() {
-        if (modCount != expectedModCount) {
-            throw new ConcurrentModificationException();
-        }
         return new Iterator<>() {
 
             @Override
@@ -89,6 +84,11 @@ public class SimpleArrayList<T> implements List<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
+
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+
                 return container[position++];
             }
         };
