@@ -17,7 +17,6 @@ public class SimpleArrayList<T> implements List<T> {
     private int expectedModCount;
 
     public SimpleArrayList(int capacity) {
-        position = 0;
         size = 0;
         this.container = (T[]) new Object[capacity];
     }
@@ -71,14 +70,12 @@ public class SimpleArrayList<T> implements List<T> {
     @Override
     public Iterator<T> iterator() {
         expectedModCount = modCount;
-        if (expectedModCount != modCount) {
-            throw new ConcurrentModificationException();
-        }
+        position = 0;
+
         return new Iterator<>() {
 
             @Override
             public boolean hasNext() {
-                expectedModCount = modCount;
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
@@ -87,14 +84,13 @@ public class SimpleArrayList<T> implements List<T> {
 
             @Override
             public T next() {
-                expectedModCount = modCount;
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
 
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return container[position++];
             }
         };
