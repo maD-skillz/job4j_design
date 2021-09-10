@@ -8,6 +8,8 @@ public class SimpleStack<T> {
 
     private Node<T> head;
 
+    private int size;
+
     public static class Node<T> {
 
         private T value;
@@ -21,13 +23,24 @@ public class SimpleStack<T> {
     }
 
     public void addFirst(T value) {
-        Node<T> newNode = new Node<>(value, null);
+        Node<T> firstNode = new Node<>(value, null);
         if (head == null) {
-            head = newNode;
+            head = firstNode;
         } else {
-            newNode.next = head;
-            head = newNode;
+            firstNode.next = head;
+            head = firstNode;
         }
+        size++;
+    }
+
+    public void addLast(T value) {
+        Node<T> lastNode = new Node<>(value, null);
+        Node<T> temp = lastNode.next;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = lastNode;
+        size++;
     }
 
     public T delFirst() {
@@ -36,6 +49,7 @@ public class SimpleStack<T> {
         }
         T del = head.value;
         head = head.next;
+        size--;
         return del;
     }
 
@@ -45,5 +59,13 @@ public class SimpleStack<T> {
 
     public void push(T value) {
         addFirst(value);
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public int size() {
+        return size;
     }
 }
