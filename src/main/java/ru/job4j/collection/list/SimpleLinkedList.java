@@ -56,8 +56,6 @@ public class SimpleLinkedList<E> implements List<E> {
     public SimpleLinkedList() {
         lastNode = new Node<E>(null, firstNode, null);
         firstNode = new Node<E>(null, null, lastNode);
-
-
     }
 
     @Override
@@ -84,20 +82,18 @@ public class SimpleLinkedList<E> implements List<E> {
         return current.getNextEl();
     }
 
-
-
     @Override
     public Iterator<E> iterator() {
         expectedModCount = modCount;
         return new Iterator<E>() {
-            Node<E> node = firstNode;
+            Node<E> current = firstNode;
 
             @Override
             public boolean hasNext() {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return node != null;
+                return current.nextEl != lastNode;
             }
 
             @Override
@@ -109,9 +105,9 @@ public class SimpleLinkedList<E> implements List<E> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
+                E res = current.nextEl.getCurrEl();
+                current = current.getNextEl();
 
-                E res = node.nextEl.currEl;
-                node = node.getNextEl();
                 return res;
             }
         };
