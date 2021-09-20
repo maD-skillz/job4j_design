@@ -64,7 +64,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         if (indexKey != keyHash) {
                 return null;
             }
-        return table[indexOf(key)].value;
+        return table[keyHash].value;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         if (indexKey != keyHash) {
             return false;
         }
-        table[indexOf(key)] = null;
+        table[keyHash] = null;
         modCount++;
         return true;
     }
