@@ -1,4 +1,4 @@
-package ru.job4j.tee;
+package ru.job4j.tree;
 
 import java.util.*;
 import java.util.function.Predicate;
