@@ -1,6 +1,9 @@
 package ru.job4j.tree;
 
 import org.junit.Test;
+import ru.job4j.tee.SimpleTree;
+import ru.job4j.tee.Tree;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
