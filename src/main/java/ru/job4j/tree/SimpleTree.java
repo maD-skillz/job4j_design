@@ -20,8 +20,7 @@ public class SimpleTree<E> implements Tree<E> {
         Optional<Tree.Node<E>> parentSearch = findBy(parent);
         Optional<Tree.Node<E>> childSearch = findBy(child);
         if (childSearch.isEmpty() && parentSearch.isPresent()) {
-                Node<E> findParent = parentSearch.get();
-                findParent.children.add(new Node<>(child));
+            parentSearch.get().children.add(new Node<>(child));
                 rsl = true;
             }
         return rsl;
