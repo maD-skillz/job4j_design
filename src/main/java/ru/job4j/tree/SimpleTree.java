@@ -18,13 +18,12 @@ public class SimpleTree<E> implements Tree<E> {
     public boolean add(E parent, E child) {
         boolean rsl = false;
         Optional<Tree.Node<E>> parentSearch = findBy(parent);
-        if (findBy(child).isEmpty()) {
-            if (parentSearch.isPresent()) {
+        Optional<Tree.Node<E>> childSearch = findBy(child);
+        if (childSearch.isEmpty() && parentSearch.isPresent()) {
                 Node<E> findParent = parentSearch.get();
                 findParent.children.add(new Node<>(child));
                 rsl = true;
             }
-        }
         return rsl;
     }
 
