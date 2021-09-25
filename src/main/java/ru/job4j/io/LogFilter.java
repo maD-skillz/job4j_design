@@ -3,17 +3,27 @@ package ru.job4j.io;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LogFilter {
     public static List<String> filter(String file) {
         List<String> list = new ArrayList<>();
+        String stringToFind = "404";
+        for (String i : read(file)) {
+            if (stringToFind.equals(i.split(" ")[8])) {
+                list.add(i);
+            }
+        }
+        return list;
+    }
+
+    public static List<String> read(String file) {
+        List<String> list = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader("log.txt"))) {
-            return in.lines().filter(s -> s.contains("404")).collect(Collectors.toList());
+            in.lines().forEach(list::add);
         } catch (Exception e) {
             e.printStackTrace();
         }
-                return list;
+        return list;
     }
 
     public static void save(List<String> log, String file) {
