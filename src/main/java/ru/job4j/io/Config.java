@@ -10,22 +10,26 @@ import java.util.StringJoiner;
 public class Config {
 
     private final String path;
-    private final Map<String, String> values = new HashMap<String, String>();
+    private final Map<String, String> values = new HashMap<>();
 
     public Config(final String path) {
         this.path = path;
     }
 
     public void load() {
-       try (BufferedReader in = new BufferedReader(new FileReader(this.path))) {
+       try (BufferedReader in = new BufferedReader(new FileReader(path))) {
              in.lines().forEach(e -> {
-                if (!e.isEmpty() && !e.contains("#")) {
+                if (!e.isEmpty() && !e.startsWith("#")) {
+                    if (e.contains("=") && !e.startsWith("=")) {
                     String[] el = e.split("=");
                     values.put(el[0], el[1]);
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+             e.printStackTrace();
         }
     }
 
