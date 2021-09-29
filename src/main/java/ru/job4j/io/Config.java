@@ -19,15 +19,15 @@ public class Config {
     public void load() {
        try (BufferedReader in = new BufferedReader(new FileReader(path))) {
              in.lines().forEach(e -> {
-                if (!e.isEmpty() && !e.startsWith("#")) {
-                    if (e.contains("=") && !e.startsWith("=")) {
-                    String[] el = e.split("=");
-                    values.put(el[0], el[1]);
-                    } else {
-                        throw new IllegalArgumentException();
-                    }
+                 if (!e.isEmpty() && !e.startsWith("#")) {
+                 String[] el = e.split("=");
+                 String key = el[0].trim();
+                 if (el.length != 2 || key.isEmpty()) {
+                     throw new IllegalArgumentException();
+                 }
+                 values.put(el[0], el[1]);
                 }
-            });
+             });
         } catch (IOException e) {
              e.printStackTrace();
         }
