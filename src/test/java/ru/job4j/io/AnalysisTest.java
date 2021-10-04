@@ -1,11 +1,10 @@
 package ru.job4j.io;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +47,27 @@ public class AnalysisTest {
         analysis.unavailable(source, target);
         assertThat(getFileInfo(target), is("[10:57:01;11:02:02]"));
     }
+
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    @Test
+    public void temporaryFolderTest() throws IOException {
+        Analysis analysis = new Analysis();
+        File src = tempFolder.newFile(source);
+        File tgt = tempFolder.newFile(target);
+        writeToFile(src.getAbsolutePath(), List.of(
+                    "200 10:56:01",
+                    "500 10:57:01",
+                    "400 10:58:01",
+                    "500 10:59:01",
+                    "400 11:01:02",
+                    "200 11:02:02"
+            ));
+            analysis.unavailable(src.getAbsolutePath(), tgt.getAbsolutePath());
+            assertThat(getFileInfo(tgt.getAbsolutePath()), is("[10:57:01;11:02:02]"));
+        }
+
 
     private String getFileInfo(String path) {
         List<String> list = new ArrayList<>();
