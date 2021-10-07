@@ -54,8 +54,8 @@ public class SimpleLinkedList<E> implements ListE<E> {
     }
 
     public SimpleLinkedList() {
-        lastNode = new Node<E>(null, firstNode, null);
-        firstNode = new Node<E>(null, null, lastNode);
+        lastNode = new Node<>(null, firstNode, null);
+        firstNode = new Node<>(null, null, lastNode);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class SimpleLinkedList<E> implements ListE<E> {
     @Override
     public Iterator<E> iterator() {
         expectedModCount = modCount;
-        return new Iterator<E>() {
+        return new Iterator<>() {
             Node<E> current = firstNode;
 
             @Override
