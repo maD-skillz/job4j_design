@@ -16,16 +16,16 @@ public class ArgsName {
             throw new IllegalArgumentException();
         }
 
-        if (!args[0].contains("Xmx") && !args[0].contains("encoding")) {
-            throw new IllegalArgumentException();
-        }
-
         for (String i : args) {
             String[] getKeyAndVal = i.split("=");
-            if (args[0].contains("Xmx")) {
-                values.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
-            } else if (args[1].contains("Xmx")) {
-                values.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
+            if (getKeyAndVal.length == 2) {
+                if (getKeyAndVal[0].startsWith("-")) {
+                    values.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
+                } else  {
+                    values.put(getKeyAndVal[1].substring(1), getKeyAndVal[0]);
+                }
+            } else {
+                throw new IllegalArgumentException();
             }
         }
     }
