@@ -13,7 +13,7 @@ public class ArgsName {
 
     private void parse(String[] args) {
         if (args.length == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Аргументы отсутствуют. Введите аргументы.");
         }
 
         for (String i : args) {
@@ -21,14 +21,19 @@ public class ArgsName {
             if (getKeyAndVal.length == 2) {
                 if (getKeyAndVal[0].startsWith("-")) {
                     values.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
-                } else  {
-                    values.put(getKeyAndVal[1].substring(1), getKeyAndVal[0]);
+                }
+                if (getKeyAndVal[1].startsWith("-")) {
+                        values.put(getKeyAndVal[1].substring(1), getKeyAndVal[0]);
+                }
+                if (!getKeyAndVal[0].startsWith("-")) {
+                    throw new IllegalArgumentException("Аргументы должны начинаться со знака '-'");
                 }
             } else {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Неверное количество аргументов.");
             }
         }
     }
+
 
     public static ArgsName of(String[] args) {
         ArgsName names = new ArgsName();
