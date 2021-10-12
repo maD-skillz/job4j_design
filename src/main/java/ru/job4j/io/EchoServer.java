@@ -17,11 +17,16 @@ public class EchoServer {
                     String str;
                     while (in.ready()) {
                         str = in.readLine();
-                        if (str.contains("msg=Bye")) {
+                        if (str.contains("msg=Hello")) {
+                            System.out.println("Hello");
+                            break;
+                        }
+
+                        if (str.contains("msg=Exit")) {
                             serverStatus = false;
                             break;
                         }
-                        System.out.println(str);
+                        System.out.println("What");
                         break;
                     }
                     out.flush();
