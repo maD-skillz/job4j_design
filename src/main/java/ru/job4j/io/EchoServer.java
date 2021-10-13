@@ -18,7 +18,7 @@ public class EchoServer {
                     while (in.ready()) {
                         str = in.readLine();
                         if (str.contains("msg=Hello")) {
-                            System.out.println("Hello");
+                            out.write("Hello\r\n\r\n".getBytes());
                             break;
                         }
 
@@ -26,7 +26,7 @@ public class EchoServer {
                             serverStatus = false;
                             break;
                         }
-                        System.out.println("What");
+                        out.write("What\r\n\r\n".getBytes());
                         break;
                     }
                     out.flush();
