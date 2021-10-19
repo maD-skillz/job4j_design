@@ -12,9 +12,9 @@ public class UsageLog4j {
         byte getByte = 8;
         short getShort = 16;
         int getInt = 32;
-        long getLong = 64;
+        long getLong = 64L;
         char getChar = '0';
-        float getFloat = 32;
+        float getFloat = 32F;
         double getDouble = 64.1;
         LOG.debug("Primitive types : {}", getBool);
         LOG.debug("Primitive types : {}", getByte);
