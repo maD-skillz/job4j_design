@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+        <server isActive="true" memory="1024">
+    <innerData data="200000"/>
+    <devices>
+        <device>Intel</device>
+        <device>Xeon</device>
+        <device>MsiMotherboard</device>
+        <device>SamsungRam</device>
+    </devices>
+</server>
