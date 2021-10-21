@@ -73,22 +73,5 @@ public class JsonExample {
         System.out.println(jsonObject.toString());
 
         System.out.println(new JSONObject(json).toString());
-
-   /*     final Gson gson = new GsonBuilder().create();
-        System.out.println(gson.toJson(json));
-
-        final String jsonToString =
-                "{"
-                + "\"isEmpty\":false,"
-                + "\"count\":40,"
-                        + "\"jsonContact\":"
-                + "{"
-                + "\"numbers\":\"222444\""
-                        + "}, "
-                + "\"counter\":"
-                + "[\" Three\",\"Four\"]"
-                + "}";
-        final JsonExample jsonEx = gson.fromJson(jsonToString, JsonExample.class);
-        System.out.println(jsonEx); */
     }
 }
