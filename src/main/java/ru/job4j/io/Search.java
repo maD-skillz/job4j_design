@@ -8,19 +8,32 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Search {
-    public static void main(String[] args) throws IOException {
-        Path start = Paths.get(args[0]);
-        Path ext = Paths.get(args[1]);
-        if (args.length == 0) {
+
+    public static Path start;
+    public static String ext;
+
+    public static void validateArguments(String[] args) {
+       start = Paths.get(args[0]);
+        ext = args[1];
+
+        if (args.length != 2) {
             throw new IllegalArgumentException(
-                    "Root folder is null. Usage java -jar search.jar ROOT_FOLDER.");
+                    "Invalid argument number.");
         }
 
         if (!Files.exists(start)) {
             throw new IllegalArgumentException("Path is not exist!");
         }
 
-        search(start, p -> p.toFile().getName().endsWith(ext.toString())).forEach(System.out::println);
+        if (ext == null) {
+            throw new IllegalArgumentException("Extension absent.");
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        start = Paths.get(args[0]);
+        ext = args[1];
+        search(start, p -> p.toFile().getName().endsWith(ext)).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
