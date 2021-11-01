@@ -9,31 +9,19 @@ import java.util.function.Predicate;
 
 public class Search {
 
-    public static Path start;
-    public static String ext;
-
     public static void validateArguments(String[] args) {
-       start = Paths.get(args[0]);
-        ext = args[1];
-
-        if (args.length != 2) {
-            throw new IllegalArgumentException(
-                    "Invalid argument number.");
-        }
-
-        if (!Files.exists(start)) {
-            throw new IllegalArgumentException("Path is not exist!");
-        }
-
-        if (ext == null) {
-            throw new IllegalArgumentException("Extension absent.");
+        if (args.length == 2) {
+            if (!Files.exists(Paths.get(args[0]))) {
+                throw new IllegalArgumentException("Argument not exist!");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid arguments number!");
         }
     }
 
     public static void main(String[] args) throws IOException {
-        start = Paths.get(args[0]);
-        ext = args[1];
-        search(start, p -> p.toFile().getName().endsWith(ext)).forEach(System.out::println);
+        validateArguments(args);
+        search(Paths.get(args[0]), p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
