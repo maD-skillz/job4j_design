@@ -12,8 +12,7 @@ public class Analize {
 
     public static Info diff(Set<User> previous, Set<User> current) {
         Info inf = new Info(0, 0, 0);
-        Map<String, Integer> mapPrev = new HashMap<>();
-        Map<String, Integer> mapCur = new HashMap<>();
+        Map<Integer, User> mapPrev = new HashMap<>();
         for (User prevUser : previous) {
             if (!current.contains(prevUser)) {
                 inf.setDeleted(countDeleted++);
@@ -27,17 +26,10 @@ public class Analize {
         }
 
         for (User i : previous) {
-            mapPrev.put(i.getName(), i.getId());
-        }
-
-        for (User j : current) {
-            mapCur.put(j.getName(), j.getId());
-        }
-
-        for (Map.Entry<String, Integer> ind : mapPrev.entrySet()) {
-            for (Map.Entry<String, Integer> ind2 : mapCur.entrySet()) {
-                if (!ind.getKey().equals(ind2.getKey())
-                && ind.getValue().equals(ind2.getValue())) {
+            mapPrev.put(i.getId(), i);
+            for (User j : current) {
+                mapPrev.put(j.getId(), j);
+                if (!mapPrev.get(i.getId()).equals(mapPrev.get(j.getId())) && i.getId() == j.getId()) {
                     inf.setChanged(countChanged++);
                 }
             }
