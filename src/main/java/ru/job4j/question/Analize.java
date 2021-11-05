@@ -6,37 +6,29 @@ import java.util.Set;
 
 public class Analize {
 
-    public static int countAdded;
-    public static int countChanged;
-    public static int countDeleted;
-
     public static Info diff(Set<User> previous, Set<User> current) {
-        Info inf = new Info(0, 0, 0);
+        int countAdded = 0;
+        int countChanged = 0;
         Map<Integer, User> mapPrev = new HashMap<>();
-        for (User prevUser : previous) {
-            if (!current.contains(prevUser)) {
-                inf.setDeleted(countDeleted++);
-            }
-        }
-
-        for (User currUser : current) {
-            if (!previous.contains(currUser)) {
-                inf.setAdded(countAdded++);
-            }
-        }
 
         for (User i : previous) {
             mapPrev.put(i.getId(), i);
-            for (User j : current) {
-                mapPrev.put(j.getId(), j);
-                if (!mapPrev.get(i.getId()).equals(mapPrev.get(j.getId())) && i.getId() == j.getId()) {
-                    inf.setChanged(countChanged++);
-                }
-            }
         }
 
-        return inf;
+        for (User j : current) {
+            User previousUser = mapPrev.putIfAbsent(j.getId(), j);
+            if (previousUser != null) {
+                if (!j.equals(previousUser)) {
+                    countChanged++;
+                }
+            } else {
+                countAdded++;
+            }
+        }
+        int countDeleted = previous.size() - current.size() + countAdded;
+        return new Info(countAdded, countChanged, countDeleted);
     }
+
     @Override
     public int hashCode() {
         return super.hashCode();
