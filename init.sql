@@ -1,1 +1,1 @@
-create database user_items
+create database init_db
