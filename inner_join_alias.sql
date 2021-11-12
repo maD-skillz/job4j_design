@@ -19,8 +19,16 @@ insert into cars1(name, vehicle1_id) values ('Ford', 2);
 insert into cars1(name, vehicle1_id) values ('Tesla', 3);
 insert into cars1(name) values ('Buick');
 
-select c.name, v.vin_num, v.chars from cars1 as c join vehicle1 as v on c.vehicle1_id = v.id;
+select c.name, v.vin_num, v.chars
+from cars1 as c
+join vehicle1 as v
+on c.vehicle1_id = v.id;
 
-select * from cars1 inner join vehicle1 v on cars1.vehicle1_id = v.id;
+select * from cars1
+inner join vehicle1 v
+on cars1.vehicle1_id = v.id;
 
-select v.chars, c.name from vehicle1 as v join cars1 as c on c.vehicle1_id = v.id;
+select v.chars, c.name
+from vehicle1 as v
+join cars1 as c
+on c.vehicle1_id = v.id;
