@@ -36,18 +36,20 @@ select avg(price) from devices;
 select
 ppl.name,
 avg(dev.price)
-from people as ppl,
-devices as dev
+from people as ppl
 join devices_people as dppl
-on dppl.devices_id = dev.id
+on (dppl.people_id = ppl.id)
+join devices as dev
+on (dppl.devices_id = dev.id)
 group by ppl.name;
 
 select
 ppl.name,
 avg(dev.price)
-from people as ppl,
-devices as dev
+from people as ppl
 join devices_people as dppl
-on dppl.devices_id = dev.id
-group by ppl.name;
-having avg(dprice.price) > '5000';
+on (dppl.people_id = ppl.id)
+join devices as dev
+on (dppl.devices_id = dev.id)
+group by ppl.name
+having avg (dev.price) > 5000;
