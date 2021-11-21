@@ -1,19 +1,15 @@
-create table gender(
-id serial primary key,
-name varchar(255)
+create table teens (
+	name varchar (255),
+	gender varchar (255)
 );
 
-create table names(
-id serial primary key,
-name varchar(255),
-gndr_id int references gender(id)
-);
+insert into teens(name, gender) values ('Petr', 'Male');
+insert into teens(name, gender) values ('Nick', 'Male');
+insert into teens(name, gender) values ('Dmitry', 'Male');
+insert into teens(name, gender) values ('Mary', 'Female');
+insert into teens(name, gender) values ('Kate', 'Female');
+insert into teens(name, gender) values ('Darya', 'Female');
 
-insert into gender(name) values('male'), ('female');
-
-insert into names(name) values('Sasha'), ('Masha'), ('Dmitry'), ('Stas');
-
-select * from
-gender g
-cross join
-names s;
+select * from teens t1
+cross join teens t2
+where t1.gender <> t2.gender;
