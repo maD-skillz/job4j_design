@@ -28,7 +28,7 @@ on e.dep_id = d.id;
 select * from
 employe e
 right join departments d
-on d.id = e.dep_id;
+on e.dep_id = d.id;
 
 select * from
 departments d 
