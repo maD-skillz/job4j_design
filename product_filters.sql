@@ -22,9 +22,12 @@ insert into product(name, type, expired_date, price) values('натуральн�
 insert into product(name, type, expired_date, price) values('мороженое пломбир', '3', '14.01.2022', '120');
 insert into product(name, type, expired_date, price) values('мороженое рожок', '3', '12.02.2022', '35');
 
-select * from 
-product
-where type = '1';
+select
+p.name
+from product p
+join type t
+on p.id = t.type_id 
+where t.name = 'СЫР';
 
 select * from 
 product
@@ -34,8 +37,11 @@ select * from
 product
 where current_date > expired_date;
 
-select MAX(price)
-from product;
+select
+name,
+price
+from product
+where price = (select MAX(price) from product);
 
 select
 count(t.name),
@@ -43,7 +49,6 @@ t.name
 from product as p
 join type as t
 on p.type = t.id
-where t.name = 'СЫР' or t.name = 'МОЛОКО' or t.name = 'МОРОЖЕНОЕ'
 group by t.name;
 
 select 
@@ -60,7 +65,6 @@ t.name
 from product as p
 join type as t
 on p.type = t.id
-where t.name = 'СЫР' or t.name = 'МОЛОКО' or t.name = 'МОРОЖЕНОЕ'
 group by t.name;
 
 select 
