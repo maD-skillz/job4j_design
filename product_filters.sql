@@ -26,7 +26,7 @@ select
 p.name
 from product p
 join type t
-on p.id = t.type_id 
+on p.type = t.type_id 
 where t.name = 'СЫР';
 
 select * from 
@@ -60,12 +60,12 @@ on p.type = t.id
 where t.name = 'СЫР' or t.name = 'МОЛОКО';
 
 select
-count(t.name) < 10,
 t.name
 from product as p
 join type as t
 on p.type = t.id
-group by t.name;
+group by t.name
+having count(t.name) < 10;
 
 select 
 p.name,
