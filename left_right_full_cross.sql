@@ -12,6 +12,7 @@ dep_id int references departments(id)
 insert into departments(name) values('Main Department');
 insert into departments(name) values('Middle Department');
 insert into departments(name) values('Lower Department');
+insert into departments(name) values('Useless Department');
 
 insert into employe(name, dep_id) values('Jack', 1);
 insert into employe(name, dep_id) values('Nick', 2);
@@ -19,6 +20,7 @@ insert into employe(name, dep_id) values('Tom', 3);
 insert into employe(name, dep_id) values('Stan', 1);
 insert into employe(name, dep_id) values('Sam', 3);
 insert into employe(name, dep_id) values('John', 2);
+insert into employe(name) values('Ghost');
 
 select
 d.id dep_id,
@@ -36,8 +38,8 @@ d.name dep_n,
 e.id emp_id,
 e.name emp_name,
 e.dep_id depart_id
-from employe e
-right join departments d
+from departments d
+right join employe e
 on e.dep_id = d.id;
 
 select * from
@@ -54,3 +56,10 @@ on e.dep_id = d.id;
 select * from
 employe e
 cross join departments d;
+
+
+
+
+
+
+
