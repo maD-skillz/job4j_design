@@ -57,17 +57,20 @@ on c.engine_id = e.id
 join transmission t
 on c.trans_id = t.id;
 
-select b
+select *
 from body b
-where not exists(select * from car c
-where c.body_id = b.id);
+left join car c 
+on c.body_id = b.id
+where c.body_id is null;
 
-select e
+select *
 from engine e
-where not exists(select * from car c
-where c.engine_id = e.id);
+left join car c
+on e.id = c.engine_id
+where c.engine_id is null;
 
-select t
+select * 
 from transmission t
-where not exists(select * from car c
-where c.trans_id = t.id);
+left join car c
+on c.trans_id = t.id
+where c.trans_id is null;
