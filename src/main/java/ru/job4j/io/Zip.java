@@ -1,20 +1,20 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
-    public static final Map<String, String> values = new HashMap<>();
+    public static final Map<String, String> arguments = new HashMap<>();
+
+    public static List<Path> searcher;
 
     public static void parse(String[] args) {
         if (args.length == 0) {
@@ -23,15 +23,12 @@ public class Zip {
 
         for (String i : args) {
             String[] getKeyAndVal = i.split("=");
-            if (getKeyAndVal.length == 3) {
+            if (getKeyAndVal.length == 2) {
                 if (getKeyAndVal[0].startsWith("-")) {
-                    values.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
+                    arguments.put(getKeyAndVal[0].substring(1), getKeyAndVal[1]);
                 }
                 if (getKeyAndVal[1].startsWith("-")) {
-                    values.put(getKeyAndVal[1].substring(1), getKeyAndVal[0]);
-                }
-                if (getKeyAndVal[2].startsWith("-")) {
-                    values.put(getKeyAndVal[2].substring(1), getKeyAndVal[0]);
+                    arguments.put(getKeyAndVal[1].substring(1), getKeyAndVal[0]);
                 }
                 if (!getKeyAndVal[0].startsWith("-")) {
                     throw new IllegalArgumentException("Аргументы должны начинаться со знака '-'");
@@ -42,14 +39,14 @@ public class Zip {
         }
     }
 
-    public static void packFiles(List<File> sources, File target) {
-        try (ZipOutputStream zipFiles = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            zipFiles.putNextEntry(new ZipEntry(sources.stream().filter(s -> s.isFile())
-            .map(n -> String.valueOf(n))
-            .collect(Collectors.joining("/"))));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(sources.stream()
-                        .map(s -> String.valueOf(s))
-                .collect(Collectors.joining("/"))))) {
+    public static void packFiles(List<Path> sources, Path target) {
+        for (Path i : sources) {
+            searcher = search(i, p -> p.endsWith(arguments.get("-d"))
+                    && !p.toFile().getName().endsWith(arguments.get("-e")));
+        }
+        try (ZipOutputStream zipFiles = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target.toFile())))) {
+            zipFiles.putNextEntry(new ZipEntry((ZipEntry) searcher));
+                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream((File) searcher))) {
                     zipFiles.write(out.readAllBytes());
                 }
             } catch (Exception e) {
@@ -68,18 +65,23 @@ public class Zip {
         }
     }
 
-    public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
+    public static List<Path> search(Path root, Predicate<Path> condition) {
         SearchFiles searcher = new SearchFiles(condition);
-        Files.walkFileTree(root, searcher);
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(root.toFile().getAbsolutePath()))) {
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return searcher.getPaths();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         parse(args);
-        packFiles(
-                new File(search(Paths.get(args[0]), p -> !p.toFile().getName().endsWith(args[1])
-                && p.toFile().getName().endsWith(args[0].split("/").toString()))),
-                new File(args[2]));
+
+        packFiles(searcher,
+               Paths.get(arguments.get(args[2]))
+        );
+
 
         packSingleFile(
                 new File("./pom.xml"),
