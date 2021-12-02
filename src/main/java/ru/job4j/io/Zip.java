@@ -34,19 +34,20 @@ public class Zip {
 
         if (args.length == 3) {
             ArgsName argsName = ArgsName.of(args);
-           getDir = argsName.get("d");
-           skipFile = argsName.get("e");
-           targetDir = argsName.get("o");
+            getDir = argsName.get("d");
+            skipFile = argsName.get("e");
+            targetDir = argsName.get("o");
+            Predicate<Path> condition = p -> !p.toFile().getName().endsWith(skipFile);
+
+            List<Path> searchFile = Search.search(Paths.get(getDir), condition);
+
+            packFiles(searchFile,
+                    Paths.get(targetDir)
+            );
         } else {
             throw new IllegalArgumentException("Неверное количество аргументов.");
         }
 
-        Predicate<Path> condition = p -> !p.toFile().getName().endsWith(skipFile);
 
-        List<Path> searchFile = Search.search(Paths.get(getDir), condition);
-
-        packFiles(searchFile,
-               Paths.get(targetDir)
-        );
     }
 }
