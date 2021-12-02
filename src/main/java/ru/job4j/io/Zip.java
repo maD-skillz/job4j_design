@@ -47,7 +47,5 @@ public class Zip {
         } else {
             throw new IllegalArgumentException("Неверное количество аргументов.");
         }
-
-
     }
 }
