@@ -1,5 +1,7 @@
 package ru.job4j.collection.list;
 
+import ru.job4j.collection.list.ListE;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -107,7 +109,6 @@ public class SimpleLinkedList<E> implements ListE<E> {
                 }
                 E res = current.nextEl.getCurrEl();
                 current = current.getNextEl();
-
                 return res;
             }
         };

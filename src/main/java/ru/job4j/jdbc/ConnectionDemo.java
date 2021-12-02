@@ -19,7 +19,6 @@ public class ConnectionDemo {
             DatabaseMetaData metaData = connection.getMetaData();
             System.out.println(metaData.getUserName());
             System.out.println(metaData.getURL());
-           // System.out.println(password);
         }
     }
 }
