@@ -12,13 +12,17 @@ public class ConnectionDemo {
         Class.forName("org.postgresql.Driver");
         Config config = new Config("app.properties");
         config.load();
-        String url = "jdbc:postgresql://localhost:5432/idea_db";
+        String dial = config.value("hibernate.dialect");
+        String driver = config.value("hibernate.connection.driver_class");
+        String url = config.value("hibernate.connection.url");
         String login = config.value("hibernate.connection.username");
         String password = config.value("hibernate.connection.password");
         try (Connection connection = DriverManager.getConnection(url, login, password)) {
             DatabaseMetaData metaData = connection.getMetaData();
-            System.out.println(metaData.getUserName());
+            System.out.println(dial);
+            System.out.println(driver);
             System.out.println(metaData.getURL());
+            System.out.println(metaData.getUserName());
             System.out.println(password);
         }
     }
