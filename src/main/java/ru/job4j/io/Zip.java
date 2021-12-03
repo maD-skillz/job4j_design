@@ -30,9 +30,9 @@ public class Zip {
 
         if (args.length == 0) {
             throw new IllegalArgumentException("Аргументы отсутствуют. Введите аргументы.");
-        }
-
-        if (args.length == 3) {
+        } else if (args.length != 3) {
+            throw new IllegalArgumentException("Неверное количество аргументов.");
+        } else {
             ArgsName argsName = ArgsName.of(args);
             getDir = argsName.get("d");
             skipFile = argsName.get("e");
@@ -44,8 +44,6 @@ public class Zip {
             packFiles(searchFile,
                     Paths.get(targetDir)
             );
-        } else {
-            throw new IllegalArgumentException("Неверное количество аргументов.");
         }
     }
 }
