@@ -46,4 +46,5 @@ public class ConfigTest {
         config.load();
         assertThat(config.value("name"), is("surname"));
     }
+
 }
