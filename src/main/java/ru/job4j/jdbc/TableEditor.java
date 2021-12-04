@@ -1,7 +1,5 @@
 package ru.job4j.jdbc;
 
-import ru.job4j.io.Config;
-
 import java.sql.*;
 import java.util.Properties;
 import java.util.StringJoiner;
@@ -18,46 +16,36 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() throws Exception {
-        Class.forName("org.postgresql.Driver");
+        Class.forName("settings.properties");
         String url = "jdbc:postgresql://localhost:5432/idea_db";
-        connection = DriverManager.getConnection(url);
+        connection = DriverManager.getConnection(properties.getProperty(url));
     }
 
-    public void createTable(String tableName) throws Exception {
+    public void getStatement(String sql) throws Exception {
         try (Statement statement = connection.createStatement()) {
-            initConnection();
-            Config config = new Config("settings.properties");
-            config.load();
-            String create = config.value("create_table");
-            statement.execute(create);
-            getTableScheme(connection, create);
+            statement.execute(sql);
         }
     }
 
-    public void dropTable(String tableName) {
-        Config config = new Config("settings.properties");
-        config.load();
-        config.value("drop_table");
+    public void createTable(String tableName) throws Exception {
+        getStatement(String.format("CREATE TABLE %s();", tableName));
     }
 
-    public void addColumn(String tableName, String columnName, String type) {
-        Config config = new Config("settings.properties");
-        config.load();
-        config.value("add_column");
+    public void dropTable(String tableName) throws Exception {
+        getStatement(String.format("DROP TABLE %s", tableName));
     }
 
-    public void dropColumn(String tableName, String columnName) {
-        Config config = new Config("settings.properties");
-        config.load();
-        config.value("drop_column");
+    public void addColumn(String tableName, String columnName, String type) throws Exception {
+        getStatement(String.format("ALTER TABLE %s ADD COLUMN %s %s;", tableName, columnName, type));
     }
 
-    public void renameColumn(String tableName, String columnName, String newColumnName) {
-        Config config = new Config("settings.properties");
-        config.load();
-        config.value("rename_column");
+    public void dropColumn(String tableName, String columnName) throws Exception {
+        getStatement(String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName));
     }
 
+    public void renameColumn(String tableName, String columnName, String newColumnName) throws Exception {
+        getStatement(String.format("ALTER TABLE %s RENAME COLUMN %s TO %s;", tableName, columnName, newColumnName));
+    }
 
     public static String getTableScheme(Connection connection, String tableName) throws Exception {
         var rowSeparator = "-".repeat(30).concat(System.lineSeparator());
