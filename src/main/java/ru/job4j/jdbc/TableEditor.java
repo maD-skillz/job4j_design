@@ -16,9 +16,11 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() throws Exception {
-        Class.forName("settings.properties");
-        String url = "jdbc:postgresql://localhost:5432/idea_db";
-        connection = DriverManager.getConnection(properties.getProperty(url));
+        Class.forName(properties.getProperty("hibernate.connection.driver"));
+        String url = properties.getProperty("hibernate.connection.url");
+        String login = properties.getProperty("hibernate.connection.login");
+        String password = properties.getProperty("hibernate.connection.password");
+        connection = DriverManager.getConnection(url, login, password);
     }
 
     public void getStatement(String sql) throws Exception {
