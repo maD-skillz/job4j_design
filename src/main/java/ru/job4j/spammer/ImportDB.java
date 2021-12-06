@@ -25,13 +25,14 @@ public class ImportDB {
             rd.lines().forEach(e -> {
                     if (!dump.isEmpty()) {
                         String[] el = e.split(";");
-                        String key = el[0].trim();
-                        if (el.length != 2 || key.isEmpty()) {
+                        if (el.length == 2) {
+                            User user = new User(el[0], el[1]);
+                            user.name = el[0];
+                            user.email = el[1];
+
+                        } else {
                             throw  new IllegalArgumentException();
                         }
-                        User user = new User(el[0], el[1]);
-                        user.name = el[0];
-                        user.email = el[1];
                     }
             });
         }
