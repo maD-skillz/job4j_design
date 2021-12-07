@@ -1,10 +1,7 @@
 package ru.job4j.spammer;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -23,17 +20,13 @@ public class ImportDB {
         List<User> users = new ArrayList<>();
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             rd.lines().forEach(e -> {
-                    if (!dump.isEmpty()) {
-                        String[] el = e.split(";");
-                        if (el.length == 2) {
-                            User user = new User(el[0], el[1]);
-                            user.name = el[0];
-                            user.email = el[1];
+                String[] el = e.split(";");
+                if (el.length == 2) {
+                    users.add(new User(el[0], el[1]));
+                } else {
+                    throw  new IllegalArgumentException();
+                }
 
-                        } else {
-                            throw  new IllegalArgumentException();
-                        }
-                    }
             });
         }
         return users;
@@ -47,14 +40,15 @@ public class ImportDB {
                 cfg.getProperty("jdbc.password")
         )) {
             for (User user : users) {
-                try (PreparedStatement ps = cnt.prepareStatement("insert into users ...")) {
+                try (PreparedStatement ps = cnt.prepareStatement("insert into users(name, email) values(?, ?)")) {
                     ps.setString(1, user.name);
                     ps.setString(2, user.email);
                     ps.execute();
+                        }
+                    }
                 }
             }
-        }
-    }
+
 
     private static class User {
         String name;
